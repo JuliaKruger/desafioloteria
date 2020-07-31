@@ -29,21 +29,23 @@
        77 ws-quantidade                            pic 9(02).
        77 ws-fim_programa                          pic x(01).
        77 ws-aux                                   pic x(01).
-       77 ws-num-1                                 pic 9(02).
-       77 ws-num-2                                 pic 9(02).
-       77 ws-num-3                                 pic 9(02).
-       77 ws-num-4                                 pic 9(02).
-       77 ws-num-5                                 pic 9(02).
-       77 ws-num-6                                 pic 9(02).
-       77 ws-num-7                                 pic 9(02).
-       77 ws-num-8                                 pic 9(02).
-       77 ws-num-9                                 pic 9(02).
-       77 ws-num-10                                pic 9(02).
+       01 ws-numeros.
+           05 ws-num-1                             pic 9(02).
+           05 ws-num-2                             pic 9(02).
+           05 ws-num-3                             pic 9(02).
+           05 ws-num-4                             pic 9(02).
+           05 ws-num-5                             pic 9(02).
+           05 ws-num-6                             pic 9(02).
+           05 ws-num-7                             pic 9(02).
+           05 ws-num-8                             pic 9(02).
+           05 ws-num-9                             pic 9(02).
+           05 ws-num-10                            pic 9(02).
        77 ws-msn                                   pic x(25).
-       77 ws-msn-2                                 pic x(20).
+       77 ws-msn-2                                 pic x(80).
        77 ws-ind-acerto                            pic 9(01).
        77 ws-ind-erro                              pic 9(01).
        77 ws-ind-sorteio                           pic 9(10).
+       77 ws-num-repetido                          pic x(01).
 
       *>----Variáveis para comunicação entre prograpic 9(02).mas
        linkage section.
@@ -70,8 +72,8 @@
            using ws-fim_programa foreground-color 12.
            05 sc-quantidade     line 06 col 06 pic 9(2)
            using ws-quantidade foreground-color 12.
-           05 sc-msn            line 07 col 03 pic x(25)
-           from ws-msn foreground-color 12.
+           05 sc-msn            line 02 col 03 pic x(80)
+           from ws-msn foreground-color 11.
 
       *>                                0    1    1    2    2    3    3    4    4    5    5    6    6    7    7    8
       *>                                5    0    5    0    5    0    5    0    5    0    5    0    5    0    5    0
@@ -103,8 +105,10 @@
            using ws-num-5 foreground-color 12.
            05 sc-num-6          line 09 col 32 pic 9(2)
            using ws-num-6 foreground-color 12.
-           05 sc-msn-2          line 10 col 05 pic x(20)
-           from ws-msn-2 foreground-color 12.
+           05 sc-msn-2          line 02 col 03 pic x(80)
+           from ws-msn-2 foreground-color 11.
+           05 sc-aux            line 02 col 01 pic x(01)
+           using ws-aux.
 
       *>                                0    1    1    2    2    3    3    4    4    5    5    6    6    7    7    8
       *>                                5    0    5    0    5    0    5    0    5    0    5    0    5    0    5    0
@@ -139,8 +143,10 @@
            using ws-num-6 foreground-color 12.
            05 sc-num-7          line 10 col 32 pic 9(2)
            using ws-num-7 foreground-color 12.
-           05 sc-msn-2          line 11 col 05 pic x(20)
-           from ws-msn-2 foreground-color 12.
+           05 sc-msn-2          line 02 col 03 pic x(80)
+           from ws-msn-2 foreground-color 11.
+           05 sc-aux            line 02 col 01 pic x(01)
+           using ws-aux.
 
 
       *>                                0    1    1    2    2    3    3    4    4    5    5    6    6    7    7    8
@@ -179,8 +185,10 @@
            using ws-num-7 foreground-color 12.
            05 sc-num-8          line 11 col 32 pic 9(2)
            using ws-num-8 foreground-color 12.
-           05 sc-msn-2          line 12 col 05 pic x(20)
-           from ws-msn-2 foreground-color 12.
+           05 sc-msn-2          line 02 col 03 pic x(80)
+           from ws-msn-2 foreground-color 11.
+           05 sc-aux            line 02 col 01 pic x(01)
+           using ws-aux.
 
 
       *>                                0    1    1    2    2    3    3    4    4    5    5    6    6    7    7    8
@@ -222,8 +230,10 @@
            using ws-num-8 foreground-color 12.
            05 sc-num-9          line 12 col 32 pic 9(2)
            using ws-num-9 foreground-color 12.
-           05 sc-msn-2          line 13 col 05 pic x(20)
-           from ws-msn-2 foreground-color 12.
+           05 sc-msn-2          line 02 col 03 pic x(80)
+           from ws-msn-2 foreground-color 11.
+           05 sc-aux            line 02 col 01 pic x(01)
+           using ws-aux.
 
 
       *>                                0    1    1    2    2    3    3    4    4    5    5    6    6    7    7    8
@@ -268,8 +278,10 @@
            using ws-num-9 foreground-color 12.
            05 sc-num-10         line 13 col 32 pic 9(2)
            using ws-num-10 foreground-color 12.
-           05 sc-msn-2          line 14 col 05 pic x(20)
-           from ws-msn-2 foreground-color 12.
+           05 sc-msn-2          line 02 col 03 pic x(80)
+           from ws-msn-2 foreground-color 11.
+           05 sc-aux            line 02 col 01 pic x(01)
+           using ws-aux.
 
 
       *>Declaração do corpo do programa
@@ -311,103 +323,13 @@
            display sc-tela
            accept sc-tela
            perform until ws-fim_programa = "x" or ws-fim_programa = "X"
-
                if ws-quantidade < 6 or ws-quantidade > 10 then
                    move "Quantidade invalida." to ws-msn
                    display sc-tela
+                   accept sc-tela
                end-if
 
-               if ws-quantidade = 6 then
-      *> mostrando a tela de aposta de 6 números
-                   display sc-tela-6
-                   accept sc-tela-6
-               end-if
-
-               if ws-quantidade = 7 then
-      *> mostrando a tela de aposta de 7 números
-                   display sc-tela-7
-                   accept sc-tela-7
-               end-if
-
-               if ws-quantidade = 8 then
-      *> mostrando a tela de aposta de 8 números
-                   display sc-tela-8
-                   accept sc-tela-8
-               end-if
-
-               if ws-quantidade = 9 then
-      *> mostrando a tela de aposta de 9 números
-                   display sc-tela-9
-                   accept sc-tela-9
-               end-if
-
-               if ws-quantidade = 10 then
-      *> mostrando a tela de aposta de 10 números
-                   display sc-tela-10
-                   accept sc-tela-10
-               end-if
-
-      *> testes para ver se os números inseridos são válidos
-               if ws-num-1 < 1 or ws-num-1 > 60 then
-                   move "Numero invalido." to ws-msn-2
-               end-if
-               if ws-num-2 < 1 or ws-num-2 > 60 then
-                   move "Numero invalido." to ws-msn-2
-               end-if
-               if ws-num-3 < 1 or ws-num-3 > 60 then
-                   move "Numero invalido." to ws-msn-2
-               end-if
-               if ws-num-4 < 1 or ws-num-4 > 60 then
-                   move "Numero invalido." to ws-msn-2
-               end-if
-               if ws-num-5 < 1 or ws-num-5 > 60 then
-                   move "Numero invalido." to ws-msn-2
-               end-if
-               if ws-num-6 < 1 or ws-num-6 > 60 then
-                   move "Numero invalido." to ws-msn-2
-               end-if
-
-               if ws-quantidade = 7 then
-                   if ws-num-7 < 1 or ws-num-7 > 60 then
-                       move "Numero invalido." to ws-msn-2
-                   end-if
-               end-if
-
-               if ws-quantidade = 8 then
-                   if ws-num-7 < 1 or ws-num-7 > 60 then
-                       move "Numero invalido." to ws-msn-2
-                   end-if
-                   if ws-num-8 < 1 or ws-num-8 > 60 then
-                       move "Numero invalido." to ws-msn-2
-                   end-if
-               end-if
-
-               if ws-quantidade = 9 then
-                   if ws-num-7 < 1 or ws-num-7 > 60 then
-                       move "Numero invalido." to ws-msn-2
-                   end-if
-                   if ws-num-8 < 1 or ws-num-8 > 60 then
-                       move "Numero invalido." to ws-msn-2
-                   end-if
-                   if ws-num-9 < 1 or ws-num-9 > 60 then
-                       move "Numero invalido." to ws-msn-2
-                   end-if
-               end-if
-
-               if ws-quantidade = 10 then
-                   if ws-num-7 < 1 or ws-num-7 > 60 then
-                       move "Numero invalido." to ws-msn-2
-                   end-if
-                   if ws-num-8 < 1 or ws-num-8 > 60 then
-                       move "Numero invalido." to ws-msn-2
-                   end-if
-                   if ws-num-9 < 1 or ws-num-9 > 60 then
-                       move "Numero invalido." to ws-msn-2
-                   end-if
-                   if ws-num-10 < 1 or ws-num-10 > 60 then
-                       move "Numero invalido." to ws-msn-2
-                   end-if
-               end-if
+               perform testes
 
                display erase
                move 1 to ws-ind-sorteio
@@ -430,16 +352,7 @@
       *> zerando as variáveis
                move zero to ws-quantidade
                move space to ws-fim_programa
-               move zero to ws-num-1
-               move zero to ws-num-2
-               move zero to ws-num-3
-               move zero to ws-num-4
-               move zero to ws-num-5
-               move zero to ws-num-6
-               move zero to ws-num-7
-               move zero to ws-num-8
-               move zero to ws-num-9
-               move zero to ws-num-10
+               initialize ws-numeros
                move zero to ws-ind-acerto
                move zero to ws-ind-erro
                move zero to ws-ind-sorteio
@@ -449,6 +362,286 @@
            end-perform
            .
        processamento-exit.
+           exit.
+
+      *>-------------------------------------------------------------------------------------------------------
+      *> Section para testes (se algum número apostado é igual a algum anterior e se algum número é inválido)
+      *>-------------------------------------------------------------------------------------------------------
+       testes section.
+           move "S" to ws-num-repetido
+           perform until ws-num-repetido = "N"
+               if ws-quantidade = 6 then
+                   initialize ws-numeros
+                   move spaces to ws-msn-2
+      *> mostrando a tela de aposta de 6 números
+                   display sc-tela-6
+                   accept sc-tela-6
+      *> comparando se o número apostado é igual ao anterior
+                   if ws-num-2 = ws-num-1 or
+                   ws-num-3 = ws-num-1 or
+                   ws-num-3 = ws-num-2 or
+                   ws-num-4 = ws-num-1 or
+                   ws-num-4 = ws-num-2 or
+                   ws-num-4 = ws-num-3 or
+                   ws-num-5 = ws-num-1 or
+                   ws-num-5 = ws-num-2 or
+                   ws-num-5 = ws-num-3 or
+                   ws-num-5 = ws-num-4 or
+                   ws-num-6 = ws-num-1 or
+                   ws-num-6 = ws-num-2 or
+                   ws-num-6 = ws-num-3 or
+                   ws-num-6 = ws-num-4 or
+                   ws-num-6 = ws-num-5 or
+      *> testes para ver se os números inseridos são válidos
+                   ws-num-1 < 1 or ws-num-1 > 60 or
+                   ws-num-2 < 1 or ws-num-2 > 60 or
+                   ws-num-3 < 1 or ws-num-3 > 60 or
+                   ws-num-4 < 1 or ws-num-4 > 60 or
+                   ws-num-5 < 1 or ws-num-5 > 60 or
+                   ws-num-6 < 1 or ws-num-6 > 60 then
+                       move "Existe numero repetido ou invalido, aperte enter para tentar novamente." to ws-msn-2
+                       display sc-tela-6
+                       accept ws-aux
+                       move "S" to ws-num-repetido
+                   else
+                       move "N" to ws-num-repetido
+                   end-if
+               end-if
+
+               if ws-quantidade = 7 then
+                   initialize ws-numeros
+                   move spaces to ws-msn-2
+      *> mostrando a tela de aposta de 7 números
+                   display sc-tela-7
+                   accept sc-tela-7
+      *> comparando se o número apostado é igual ao anterior
+                   if ws-num-2 = ws-num-1 or
+                   ws-num-3 = ws-num-1 or
+                   ws-num-3 = ws-num-2 or
+                   ws-num-4 = ws-num-1 or
+                   ws-num-4 = ws-num-2 or
+                   ws-num-4 = ws-num-3 or
+                   ws-num-5 = ws-num-1 or
+                   ws-num-5 = ws-num-2 or
+                   ws-num-5 = ws-num-3 or
+                   ws-num-5 = ws-num-4 or
+                   ws-num-6 = ws-num-1 or
+                   ws-num-6 = ws-num-2 or
+                   ws-num-6 = ws-num-3 or
+                   ws-num-6 = ws-num-4 or
+                   ws-num-6 = ws-num-5 or
+                   ws-num-7 = ws-num-1 or
+                   ws-num-7 = ws-num-2 or
+                   ws-num-7 = ws-num-3 or
+                   ws-num-7 = ws-num-4 or
+                   ws-num-7 = ws-num-5 or
+                   ws-num-7 = ws-num-6 or
+      *> testes para ver se os números inseridos são válidos
+                   ws-num-1 < 1 or ws-num-1 > 60 or
+                   ws-num-2 < 1 or ws-num-2 > 60 or
+                   ws-num-3 < 1 or ws-num-3 > 60 or
+                   ws-num-4 < 1 or ws-num-4 > 60 or
+                   ws-num-5 < 1 or ws-num-5 > 60 or
+                   ws-num-6 < 1 or ws-num-6 > 60 or
+                   ws-num-7 < 1 or ws-num-7 > 60 then
+                       move "Existe numero repetido ou invalido, aperte enter para tentar novamente." to ws-msn-2
+                       display sc-tela-7
+                       accept ws-aux
+                       move "S" to ws-num-repetido
+                   else
+                       move "N" to ws-num-repetido
+                   end-if
+               end-if
+
+               if ws-quantidade = 8 then
+                   initialize ws-numeros
+                   move spaces to ws-msn-2
+      *> mostrando a tela de aposta de 8 números
+                   display sc-tela-8
+                   accept sc-tela-8
+      *> comparando se o número apostado é igual ao anterior
+                   if ws-num-2 = ws-num-1 or
+                   ws-num-3 = ws-num-1 or
+                   ws-num-3 = ws-num-2 or
+                   ws-num-4 = ws-num-1 or
+                   ws-num-4 = ws-num-2 or
+                   ws-num-4 = ws-num-3 or
+                   ws-num-5 = ws-num-1 or
+                   ws-num-5 = ws-num-2 or
+                   ws-num-5 = ws-num-3 or
+                   ws-num-5 = ws-num-4 or
+                   ws-num-6 = ws-num-1 or
+                   ws-num-6 = ws-num-2 or
+                   ws-num-6 = ws-num-3 or
+                   ws-num-6 = ws-num-4 or
+                   ws-num-6 = ws-num-5 or
+                   ws-num-7 = ws-num-1 or
+                   ws-num-7 = ws-num-2 or
+                   ws-num-7 = ws-num-3 or
+                   ws-num-7 = ws-num-4 or
+                   ws-num-7 = ws-num-5 or
+                   ws-num-7 = ws-num-6 or
+                   ws-num-8 = ws-num-1 or
+                   ws-num-8 = ws-num-2 or
+                   ws-num-8 = ws-num-3 or
+                   ws-num-8 = ws-num-4 or
+                   ws-num-8 = ws-num-5 or
+                   ws-num-8 = ws-num-6 or
+                   ws-num-8 = ws-num-7 or
+      *> testes para ver se os números inseridos são válidos
+                   ws-num-1 < 1 or ws-num-1 > 60 or
+                   ws-num-2 < 1 or ws-num-2 > 60 or
+                   ws-num-3 < 1 or ws-num-3 > 60 or
+                   ws-num-4 < 1 or ws-num-4 > 60 or
+                   ws-num-5 < 1 or ws-num-5 > 60 or
+                   ws-num-6 < 1 or ws-num-6 > 60 or
+                   ws-num-7 < 1 or ws-num-7 > 60 or
+                   ws-num-8 < 1 or ws-num-8 > 60 then
+                       move "Existe numero repetido ou invalido, aperte enter para tentar novamente." to ws-msn-2
+                       display sc-tela-8
+                       accept ws-aux
+                       move "S" to ws-num-repetido
+                   else
+                       move "N" to ws-num-repetido
+                   end-if
+               end-if
+
+               if ws-quantidade = 9 then
+                   initialize ws-numeros
+                   move spaces to ws-msn-2
+      *> mostrando a tela de aposta de 9 números
+                   display sc-tela-9
+                   accept sc-tela-9
+      *> comparando se o número apostado é igual ao anterior
+                   if ws-num-2 = ws-num-1 or
+                   ws-num-3 = ws-num-1 or
+                   ws-num-3 = ws-num-2 or
+                   ws-num-4 = ws-num-1 or
+                   ws-num-4 = ws-num-2 or
+                   ws-num-4 = ws-num-3 or
+                   ws-num-5 = ws-num-1 or
+                   ws-num-5 = ws-num-2 or
+                   ws-num-5 = ws-num-3 or
+                   ws-num-5 = ws-num-4 or
+                   ws-num-6 = ws-num-1 or
+                   ws-num-6 = ws-num-2 or
+                   ws-num-6 = ws-num-3 or
+                   ws-num-6 = ws-num-4 or
+                   ws-num-6 = ws-num-5 or
+                   ws-num-7 = ws-num-1 or
+                   ws-num-7 = ws-num-2 or
+                   ws-num-7 = ws-num-3 or
+                   ws-num-7 = ws-num-4 or
+                   ws-num-7 = ws-num-5 or
+                   ws-num-7 = ws-num-6 or
+                   ws-num-8 = ws-num-1 or
+                   ws-num-8 = ws-num-2 or
+                   ws-num-8 = ws-num-3 or
+                   ws-num-8 = ws-num-4 or
+                   ws-num-8 = ws-num-5 or
+                   ws-num-8 = ws-num-6 or
+                   ws-num-8 = ws-num-7 or
+                   ws-num-9 = ws-num-1 or
+                   ws-num-9 = ws-num-2 or
+                   ws-num-9 = ws-num-3 or
+                   ws-num-9 = ws-num-4 or
+                   ws-num-9 = ws-num-5 or
+                   ws-num-9 = ws-num-6 or
+                   ws-num-9 = ws-num-7 or
+                   ws-num-9 = ws-num-8 or
+      *> testes para ver se os números inseridos são válidos
+                   ws-num-1 < 1 or ws-num-1 > 60 or
+                   ws-num-2 < 1 or ws-num-2 > 60 or
+                   ws-num-3 < 1 or ws-num-3 > 60 or
+                   ws-num-4 < 1 or ws-num-4 > 60 or
+                   ws-num-5 < 1 or ws-num-5 > 60 or
+                   ws-num-6 < 1 or ws-num-6 > 60 or
+                   ws-num-7 < 1 or ws-num-7 > 60 or
+                   ws-num-8 < 1 or ws-num-8 > 60 or
+                   ws-num-9 < 1 or ws-num-9 > 60 then
+                       move "Existe numero repetido ou invalido, aperte enter para tentar novamente." to ws-msn-2
+                       display sc-tela-9
+                       accept ws-aux
+                       move "S" to ws-num-repetido
+                   else
+                       move "N" to ws-num-repetido
+                   end-if
+               end-if
+
+               if ws-quantidade = 10 then
+                   initialize ws-numeros
+                   move spaces to ws-msn-2
+      *> mostrando a tela de aposta de 10 números
+                   display sc-tela-10
+                   accept sc-tela-10
+      *> comparando se o número apostado é igual ao anterior
+                   if ws-num-2 = ws-num-1 or
+                   ws-num-3 = ws-num-1 or
+                   ws-num-3 = ws-num-2 or
+                   ws-num-4 = ws-num-1 or
+                   ws-num-4 = ws-num-2 or
+                   ws-num-4 = ws-num-3 or
+                   ws-num-5 = ws-num-1 or
+                   ws-num-5 = ws-num-2 or
+                   ws-num-5 = ws-num-3 or
+                   ws-num-5 = ws-num-4 or
+                   ws-num-6 = ws-num-1 or
+                   ws-num-6 = ws-num-2 or
+                   ws-num-6 = ws-num-3 or
+                   ws-num-6 = ws-num-4 or
+                   ws-num-6 = ws-num-5 or
+                   ws-num-7 = ws-num-1 or
+                   ws-num-7 = ws-num-2 or
+                   ws-num-7 = ws-num-3 or
+                   ws-num-7 = ws-num-4 or
+                   ws-num-7 = ws-num-5 or
+                   ws-num-7 = ws-num-6 or
+                   ws-num-8 = ws-num-1 or
+                   ws-num-8 = ws-num-2 or
+                   ws-num-8 = ws-num-3 or
+                   ws-num-8 = ws-num-4 or
+                   ws-num-8 = ws-num-5 or
+                   ws-num-8 = ws-num-6 or
+                   ws-num-8 = ws-num-7 or
+                   ws-num-9 = ws-num-1 or
+                   ws-num-9 = ws-num-2 or
+                   ws-num-9 = ws-num-3 or
+                   ws-num-9 = ws-num-4 or
+                   ws-num-9 = ws-num-5 or
+                   ws-num-9 = ws-num-6 or
+                   ws-num-9 = ws-num-7 or
+                   ws-num-9 = ws-num-8 or
+                   ws-num-10 = ws-num-1 or
+                   ws-num-10 = ws-num-2 or
+                   ws-num-10 = ws-num-3 or
+                   ws-num-10 = ws-num-4 or
+                   ws-num-10 = ws-num-5 or
+                   ws-num-10 = ws-num-6 or
+                   ws-num-10 = ws-num-7 or
+                   ws-num-10 = ws-num-8 or
+                   ws-num-10 = ws-num-9 or
+      *> testes para ver se os números inseridos são válidos
+                   ws-num-1 < 1 or ws-num-1 > 60 or
+                   ws-num-2 < 1 or ws-num-2 > 60 or
+                   ws-num-3 < 1 or ws-num-3 > 60 or
+                   ws-num-4 < 1 or ws-num-4 > 60 or
+                   ws-num-5 < 1 or ws-num-5 > 60 or
+                   ws-num-6 < 1 or ws-num-6 > 60 or
+                   ws-num-7 < 1 or ws-num-7 > 60 or
+                   ws-num-8 < 1 or ws-num-8 > 60 or
+                   ws-num-9 < 1 or ws-num-9 > 60 or
+                   ws-num-10 < 1 or ws-num-10 > 60 then
+                       move "Existe numero repetido ou invalido, aperte enter para tentar novamente." to ws-msn-2
+                       display sc-tela-10
+                       accept ws-aux
+                       move "S" to ws-num-repetido
+                   else
+                       move "N" to ws-num-repetido
+                   end-if
+               end-if
+           end-perform
+           .
+       testes-exit.
            exit.
 
       *>------------------------------------------------------------------------
