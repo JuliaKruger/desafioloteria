@@ -46,6 +46,24 @@
        77 ws-ind-erro                              pic 9(01).
        77 ws-ind-sorteio                           pic 9(10).
        77 ws-num-repetido                          pic x(01).
+       01 ws-tempo1.
+           05 ws-hora1                             pic 9(02).
+           05 ws-minuto1                           pic 9(02).
+           05 ws-segundo1                          pic 9(02).
+           05 ws-centesimo1                        pic 9(02).
+       01 ws-tempo2.
+           05 ws-hora2                             pic 9(02).
+           05 ws-minuto2                           pic 9(02).
+           05 ws-segundo2                          pic 9(02).
+           05 ws-centesimo2                        pic 9(02).
+       01 ws-tempofinal.
+           05 ws-hora                              pic 9(02).
+           05 ws-minuto                            pic 9(02).
+           05 ws-segundo                           pic 9(02).
+           05 ws-centesimo                         pic 9(02).
+
+
+
 
       *>----Variáveis para comunicação entre prograpic 9(02).mas
        linkage section.
@@ -333,6 +351,8 @@
 
                display erase
                move 1 to ws-ind-sorteio
+      *> aceitando o tempo do relógio
+               accept ws-tempo1 from time
                perform until ws-ind-acerto = 6
 
                    move zero to ws-ind-acerto
@@ -346,8 +366,17 @@
                                                ws-ind-sorteio
                    add 1 to ws-ind-sorteio
                end-perform
+      *> aceitando o tempo do elógio
+               accept ws-tempo2 from time
+      *> calculando quanto tempo levou para sortear os números corretos
+               compute ws-hora = ws-hora2 - ws-hora1
+               compute ws-minuto = ws-minuto2 - ws-minuto1
+               compute ws-segundo = ws-segundo2 - ws-segundo1
+               compute ws-centesimo = ws-centesimo2 - ws-centesimo1
       *> mostrando na tela que o usuário ganhou
                display "Parabens, voce acertou com " ws-ind-sorteio " sorteios!"
+      *> mostrando na tela o tempo gasto nos sorteios
+               display "Tempo gasto nos sorteios: " ws-hora " horas, " ws-minuto " minutos, " ws-segundo " segundos, e " ws-centesimo " centesimos."
                accept ws-aux
       *> zerando as variáveis
                move zero to ws-quantidade
